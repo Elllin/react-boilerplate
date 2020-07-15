@@ -1,21 +1,12 @@
-# Issue Tracker
+# react-boilerplate
 
-> 2020.06.08 ~ 2020.06.26
+My react boilerplate
 
-## Member
+# Usage
 
-### FE
+repository를 clone해서 사용
 
-- [Ed](https://github.com/sungik-choi)
-- [Ellin](https://github.com/Elllin)
+# NPM Scripts
 
-### BE
-
-- [Hamill](https://github.com/Hamill210)
-- [Ragdoll](https://github.com/MuseopKim)
-
-## Client
-
-### [기능 요구사항](https://docs.google.com/spreadsheets/d/1XzTZNhzeVAya7F7M2Y35TXloUKVHwpKfz6Fo7TVQkYs/edit?usp=sharing)
-
-## Server
+Development, Start Server : `npm run start`
+Production : `npm run build`
