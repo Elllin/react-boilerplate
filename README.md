@@ -482,20 +482,21 @@ plugins: [new CleanWebpackPlugin()],
 
 ## package.json
 
-> ```
-> "scripts": {
-> "start": "webpack-dev-server --open --config webpack.dev.js", //dev-server 적용
->   "build": "webpack --config webpack.prod.js"
-> },
-> ```
-
+```
+"scripts": {
+"start": "webpack-dev-server --open --config webpack.dev.js", //dev-server 적용
+  "build": "webpack --config webpack.prod.js"
+},
 ```
 
 ### 참고
 
-[webpack-dev-server](https://brightparagon.wordpress.com/2018/06/27/webpack-v4-development-configuration/)
-[소스맵](https://perfectacle.github.io/2016/11/14/Webpack-devtool-option-Performance/#%EC%86%8C%EC%8A%A4%EB%A7%B5)
-[babel폴리필](https://okchangwon.tistory.com/3)
-[개발환경 최적화](https://jeonghwan-kim.github.io/series/2020/01/02/frontend-dev-env-webpack-intermediate.html)
-[webpack4 설정](https://www.zerocho.com/category/Webpack/post/58aa916d745ca90018e5301d)
-```
+webpack-dev-server : [brightparagon - [webpack v4] Development 환경 구성하기](https://brightparagon.wordpress.com/2018/06/27/webpack-v4-development-configuration/)
+
+소스맵 : [오늘도 끄적끄적 - (Webpack) devtool 옵션 퍼포먼스](https://perfectacle.github.io/2016/11/14/Webpack-devtool-option-Performance/#%EC%86%8C%EC%8A%A4%EB%A7%B5)
+
+babel폴리필 : [I'm Okay - Babel Polyfill 적용하는 방법들](https://okchangwon.tistory.com/3)
+
+개발환경 최적화 : [김정환 블로그 - 프론트엔드 개발환경의 이해: 웹팩(심화)](https://jeonghwan-kim.github.io/series/2020/01/02/frontend-dev-env-webpack-intermediate.html)
+
+webpack4 설정 : [ZeroCho - 웹팩4(Webpack) 설정하기](https://www.zerocho.com/category/Webpack/post/58aa916d745ca90018e5301d)
