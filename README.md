@@ -23,40 +23,35 @@ webpack 4가 나오면서 개발시 사용하는 `Development` 모드와 파일�
 한 개의 설정파일을 생성하고 공유하면서 커맨드라인에서 주어지는 mode 옵션을 받아서(두번째 인자) 각 빌드 별로 분기를 만들 어 설정해줄 수도 있지만 파일을 아예 개발용과 배포용으로 나눠놓는게 더 권장하는 방식이기 때문에 **Webpack Merge**를 사용해 개발용과 배포용 설정 파일에서 공통으로 쓰이는 부분을 webpack.common.js로 분리하여 사용할 것이다.
 파일 체계는 아래와 같다.
 
-> ```
-> webpack.common.js
-> webpack.dev.js
-> webpack.prod.js
-> ```
-
-````
+```
+webpack.common.js
+webpack.dev.js
+webpack.prod.js
+```
 
 아래와 같이 설치를 진행해준다.
 
-> ```
+```
 npm i webpack-merge
-````
+```
 
 ## 설치
 
 ### 노드 프로젝트 생성
 
-> ```
-> npm init
-> ```
-
-````
+```
+npm init
+```
 
 계속 엔터를 누르면 package.json파일이 생성되는 것을 알 수있다.
-
 
 ### 웹팩 설치
 
 웹팩4 부터는 webpack core와 webpack-cli 패키지가 분리되었기 때문에 두 패키지를 각각 설치해야 한다. webpack-cli webpack을 터미널에서 실행하기 위한 툴이다.
 
-> ```
+```
 npm install --save-dev webpack webpack-cli
-````
+```
 
 ## entry, output 생성
 
@@ -64,79 +59,75 @@ npm install --save-dev webpack webpack-cli
 
 entry에 경우 두개의 js파일을 생성하고 싶으면 아래와같이 두개의 파일을 명시해준다
 
-> ```
-> entry: {
-> ```
+```
+entry: {
 
-    app: './src/index.js',
-        issue: './src/issue.js'
+
+   app: './src/index.js',
+       issue: './src/issue.js'
 
 }
 
-````
+```
 
 하나의 entry에 여러 파일을 넣고싶을 경우 배열로 처리한다.
 아래의 경우는 a.js랑 b.js가 한 파일로 엮여 app.js라는 결과물로 나온다. 이렇게 웹팩은 entry의 js 파일부터 시작해서 import, require 관계로 묶여진 다른 js까지 알아서 파악한 뒤 모두 entry에 기재된 키 개수만큼으로 묶어준다.
 
-> ```
-  entry: {
-    app: ['a.js', 'b.js'],
-  },
+```
+ entry: {
+   app: ['a.js', 'b.js'],
+ },
 
-````
-
-````
+```
 
 #### 추가로 알게된 점
 
 처음에는 entry파일에 polyfill을 적용해주기 위해 배열로 파일경로를 넣어주었다.
 (배열에 넣고싶은 파일경로를 넣을 수도 있지만 npm 모듈들을 넣을 수도 있다.)
 
-
 참고로 babel을 사용하면 최신문법을 브라우저 호환성에 맞춰 예전문법으로 바꿔주지만 Map, Set같은 새로나온 기능들을 사용하려면 polyfill을 적용해야 브라우저에 적용이 가능하다.
-
 
 [babel 공식문서](https://babeljs.io/docs/en/babel-polyfill)
 위 공식문서를 보면 Babel 7.4.0부터 더이상 사용하지 않고 `core-js`와 `regenerator-runtime`을 직접 사용하는 방식을 제안하고 있다.
 또한 전역을 오염시키지 않고 웹팩 번들에 포함하여 번들 내부에 가두는 방법이 있어 그방법을 사용하기로 했다. 이러한 방식은 코드에서 사용한 폴리필 메서드만 번들에 포함된다. 방법은 아래와 같다.
 
 우선 아래와 같이 설치를 해준다.
-> ```
+
+```
 npm install --save-dev @babel/plugin-transform-runtime
 npm install --save @babel/runtime @babel/runtime-corejs3
-````
+```
 
 module의 rules아래 plugins에 아래 코드를 추가해준다.
 
-> ```
->  module: {
-> ```
+```
+ module: {
 
-    rules: [
-      {
-         test: /\.jsx?$/,
-        loader: "babel-loader",
-        plugins: [
-                  [
-                   "@babel/plugin-transform-runtime",
-                 {
-                  corejs: 3,
-                 },
-              ],
-           ],
-          ...
+   rules: [
+     {
+        test: /\.jsx?$/,
+       loader: "babel-loader",
+       plugins: [
+                 [
+                  "@babel/plugin-transform-runtime",
+                {
+                 corejs: 3,
+                },
+             ],
+          ],
+         ...
 
-````
+```
 
 ### output
 
-> ```
+```
 output: {
-  filename: "[name].bundle.js",
-  path: path.resolve(__dirname, "dist"),
-  publicPath: '/',
+ filename: "[name].bundle.js",
+ path: path.resolve(__dirname, "dist"),
+ publicPath: '/',
 },
-````
+```
 
 **filename**에 [name]은 entry에서 설정해 주었던 app인 파일이름이 [name]으로 들어가 app.bundle.js로 번들 파일을 생성해준다.
 
@@ -156,39 +147,37 @@ resolve는 웹팩이 알아서 경로나 확장자를 처리할 수 있게 도�
 
 **extensions**에 넣은 확장자들은 웹팩에서 알아서 처리해주기 때문에 파일에 저 확장자들을 입력할 필요가 없다. (같은 이름의 파일일 경우 배열에 먼저 넣은 확장자가 적용됨)
 
-> ```
-> entry: {...},
-> output: {...},
-> resolve: {
-> ```
+```
+entry: {...},
+output: {...},
+resolve: {
 
-    modules: ['node_modules'],
-    extensions: ['.js','.jsx'],
+   modules: ['node_modules'],
+   extensions: ['.js','.jsx'],
 
 },
 
-````
+```
 
 ### 경로 줄이기
 
 **resolve.alias**에 이름과 경로를 넣어주면 빌드할 때 Key의 이름을 해당 key에 매칭된 path로 바꿔서 빌드 해준다. 예를들어
 
-> ```
+```
 import main from '../../../main';
 import Utility from '../../../utilities/utility';
-````
+```
 
 위와 같은 경로를 설정해준 아래처럼 간단히 작성 가능하다.
 
-> ```
-> import main from '@/main';
-> import Utility from 'Utilities/utility';  //Utilities가 key값
-> ```
-
-````
+```
+ import main from '@/main';
+ import Utility from 'Utilities/utility';  //Utilities가 key값
+```
 
 적용 코드는 아래와 같다.
->```
+
+```
 module.exports = {
   ...
  resolve: {
@@ -199,7 +188,7 @@ module.exports = {
   }
  }
 };
-````
+```
 
 ## loader
 
@@ -207,17 +196,16 @@ loader는 babel로더를 사용할것이며 아래 링크에 따로 정리했기
 
 [babel 정리내용](https://velog.io/@lllen/babel)
 
-> ```
-> @babel/core, @babel/cli, @babel/preset-env,
-> @babel/preset-react, babel-loader
-> ```
-
-````
+```
+@babel/core, @babel/cli, @babel/preset-env,
+@babel/preset-react, babel-loader
+```
 
 ## optimization
+
 성능 최적화에 관련된 것이라 webpack.prod.js 에만 추가해주면 된다. 파일을 나누는 것은 아래를 참고하자
 
-> ```
+```
 {
   optimization: {
      minimize: true/false, //UglifyJsPlugin을 계승
@@ -227,7 +215,7 @@ loader는 babel로더를 사용할것이며 아래 링크에 따로 정리했기
      //ModuleConcatenationPlugin을 계승
 }
 }
-````
+```
 
 위 설정들은 Production 모드에서는 이미 활성화되어있기 때문에 따로 설정해 줄 필요는 없을 것 같고 `splitChunks`와`TerserWebpackPlugin` 만 추가해 주면 될 것 같다.
 
@@ -235,15 +223,13 @@ loader는 babel로더를 사용할것이며 아래 링크에 따로 정리했기
 
 아래와 같이 설치 후
 
-> ```
->   npm i -D terser-webpack-plugin
-> ```
-
-````
+```
+  npm i -D terser-webpack-plugin
+```
 
 optimization에 아래와 같이 추가한다.
 
->```
+```
   minimizer: new TerserPlugin({
         terserOptions: {
            compress: {
@@ -251,7 +237,7 @@ optimization에 아래와 같이 추가한다.
           }
         }
       })
-````
+```
 
 `SplitChunksPlugin` : 코드를 분리할때 중복을 없앤다.
 
@@ -259,20 +245,19 @@ optimization에 아래와 같이 추가한다.
 
 optimization에 아래와 같이 추가한다.
 
-> ```
->   splitChunks: {
-> ```
+```
+  splitChunks: {
 
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: "vendors",
-          chunks: "all",
-        },
-      },
-    },
+     cacheGroups: {
+       commons: {
+         test: /[\\/]node_modules[\\/]/,
+         name: "vendors",
+         chunks: "all",
+       },
+     },
+   },
 
-````
+```
 
 `cacheGroups` : 특정 파일들을 청크로 분리할 때 사용. 여기서는 common 이랑 청크를 분리한다.
 `test` : 분리할 대상이 되는 파일
@@ -283,13 +268,11 @@ optimization에 아래와 같이 추가한다.
 
 참고 : [김정환 블로그 - 프론트엔드 개발환경의 이해: 웹팩(심화)](https://jeonghwan-kim.github.io/series/2020/01/02/frontend-dev-env-webpack-intermediate.html)
 
-
 그 외..
 써드파티 라이브러리를 사용한다면 externals을 사용할 수도 있다.
 패키지로 제공될 때 이미 빌드 과정을 거쳤기 때문에 빌드 프로세스에서 제외하는 것이 좋다. 이번 프로젝트에서는 적용할 필요가 없을 것 같아서 생략했다.
 
-  ## plugin 및 코드분리
-
+## plugin 및 코드분리
 
 여기서 Production 모드에서 사용할 plugin과 Development 모드에서 사용할 plugin이 나뉘기 때문에 파일을 분리해야 한다.
 
@@ -305,9 +288,9 @@ dotenv는 개발 모드와 배포 모드를 따로 만들고 경로도 따로 �
 
 아래와 같이 설치 후 적용하자
 
-> ```
+```
 npm i --save-dev html-webpack-plugin dotenv-webpack
-````
+```
 
 **최종파일은 아래와 같다.**
 
@@ -362,6 +345,7 @@ module.exports = {
 ```
 
 **주의할 점**
+
 처음에 오류가 났는데 이유를보니 .env파일이 없어서 난 오류였다.
 .env 빈 파일이라도 생성 후 번들링 해야한다.
 
@@ -381,24 +365,22 @@ Development에서는 webpack-dev-server, Hot Module Replacement(HMR), 소스맵�
 
 우선 webpack-dev-server 를 설치한다.
 
-> ```
-> npm i --save-dev webpack-dev-server react-hot-loader
-> ```
-
-````
+```
+npm i --save-dev webpack-dev-server react-hot-loader
+```
 
 아래와같이 설정한다.
 
-> ```
- devServer = {
-          hot: true, //HMR을 사용한다는 의미로 따로 HMR를 추가하지 않아도 적용된다.
-          //host: '0.0.0.0' // 디폴트로는 "localhost" 로 잡혀있다.
-      외부에서 개발 서버에 접속해서 테스트하기 위해서는 '0.0.0.0'으로 설정해야 한다.
-        contentBase: path.join(__dirname, 'dist'),
-        port: 3000,
-        inline: true,
-        historyApiFallback: true,
-````
+```
+devServer = {
+         hot: true, //HMR을 사용한다는 의미로 따로 HMR를 추가하지 않아도 적용된다.
+         //host: '0.0.0.0' // 디폴트로는 "localhost" 로 잡혀있다.
+     외부에서 개발 서버에 접속해서 테스트하기 위해서는 '0.0.0.0'으로 설정해야 한다.
+       contentBase: path.join(__dirname, 'dist'),
+       port: 3000,
+       inline: true,
+       historyApiFallback: true,
+```
 
 `inline` : 컴파일된 코드를 일반적인 template html에 삽입하는 inline 모드와 iframe에 넣어 업데이트하는 iframe 모드가 있는데 HMR이 inline 모드에서 지원이 되므로 inline 모드를 사용했다.
 
@@ -427,6 +409,7 @@ module.exports = merge(common, {
 });
 
 
+
 ```
 
 ### Production 모드
@@ -442,15 +425,13 @@ module.exports = merge(common, {
 
 아래와 같이 설치를 해준다.
 
-> ```
->  npm i --save-dev clean-webpack-plugin
-> ```
-
+```
+ npm i --save-dev clean-webpack-plugin
 ```
 
 **최종 코드는 아래와 같다**
 
-`webpack.prod.js `
+`webpack.prod.js`
 
 ```
 
@@ -460,52 +441,55 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const common = require("./webpack.common.js");
 
 module.exports = merge(common, {
-mode: "production",
+  mode: "production",
 
-devtool: "cheap-module-source-map",
+  devtool: "cheap-module-source-map",
 
-optimization: {
-splitChunks: {
-cacheGroups: {
-commons: {
-test: /[\\/]node_modules[\\/]/,
-name: "vendors",
-chunks: "all",
-},
-},
-},
-minimize: true,
-minimizer: [
-new TerserPlugin({
-sourceMap: true,
-terserOptions: {
-compress: {
-drop_console: true,
-},
-},
-}),
-],
-},
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all",
+        },
+      },
+    },
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        sourceMap: true,
+        terserOptions: {
+          compress: {
+            drop_console: true,
+          },
+        },
+      }),
+    ],
+  },
 
-plugins: [new CleanWebpackPlugin()],
+  plugins: [new CleanWebpackPlugin()],
 });
 
-````
+
+```
 
 **주의할 점**
 CleanWebpackPlugin 사용법에 주의하자! 예전 블로그에는 잘못 된 방법으로 사용된 내용이 간혹 있어서 나도 오류를 경험했다.
 
 const { CleanWebpackPlugin } = require("clean-webpack-plugin"); 이렇게 import 해야하며 사용시 아래와 같이 사용한다
- plugins: [new CleanWebpackPlugin()],
-
+plugins: [new CleanWebpackPlugin()],
 
 ## package.json
->```
-"scripts": {
-"start": "webpack-dev-server --open --config webpack.dev.js", //dev-server 적용
-  "build": "webpack --config webpack.prod.js"
-},
-````
+
+> ```
+> "scripts": {
+> "start": "webpack-dev-server --open --config webpack.dev.js", //dev-server 적용
+>   "build": "webpack --config webpack.prod.js"
+> },
+> ```
+
+```
 
 ### 참고
 
@@ -514,3 +498,4 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin"); 이렇게 import
 [babel폴리필](https://okchangwon.tistory.com/3)
 [개발환경 최적화](https://jeonghwan-kim.github.io/series/2020/01/02/frontend-dev-env-webpack-intermediate.html)
 [webpack4 설정](https://www.zerocho.com/category/Webpack/post/58aa916d745ca90018e5301d)
+```
